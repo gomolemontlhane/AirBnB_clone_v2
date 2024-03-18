@@ -135,26 +135,28 @@ class HBNBCommand(cmd.Cmd):
             if value.startswith('"') and value.endswith('"'):
                 value = value[1:-1]
                 value = value.replace('_', ' ')
+            elif '.' in value:
+                value = float(value)
             else:
-                try:
-                    value = eval(value)
-                except Exception:
-                    continue
+                value = int(value)
             kwargs_dict[key] = value
-            """if hasattr(new_instance, key):
+        
+            if hasattr(new_instance, key):
                 setattr(new_instance, key, value)
             else:
                 continue
-        storage.new(new_instance)
+        #storage.new(new_instance)
+        new_instance.save()
         print(new_instance.id)
-        storage.save()"""
+        #storage.save()
+        """
         if kwargs_dict == {}:
             obj = eval(param_list[0])()
         else:
             obj = eval(param_list[0])(**kwargs_dict)
             storage.new(obj)
         print(obj.id)
-        obj.save()
+        obj.save()"""
 
     def help_create(self):
         """ Help information for the create method """
