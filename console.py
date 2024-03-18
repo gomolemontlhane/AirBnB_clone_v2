@@ -129,6 +129,7 @@ class HBNBCommand(cmd.Cmd):
             return
         new_instance = eval(class_name)()
         param_list = args.split(" ")
+        kwargs_dict ={}
         for i in range(1, len(param_list)):
             key, value = tuple(param_list[i].split('='))
             if value.startswith('"') and value.endswith('"'):
@@ -142,7 +143,7 @@ class HBNBCommand(cmd.Cmd):
             if hasattr(new_instance, key):
                 setattr(new_instance, key, value)
             else:
-                pass
+                continue
         storage.new(new_instance)
         print(new_instance.id)
         storage.save()
