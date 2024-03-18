@@ -141,10 +141,8 @@ class HBNBCommand(cmd.Cmd):
                 value = int(value)
             kwargs_dict[key] = value
         
-            if hasattr(new_instance, key):
-                setattr(new_instance, key, value)
-            else:
-                continue
+        for attrName, attrValue in kwargs_dict.items():
+            setattr(new_instance, attrName, attrValue)
         #storage.new(new_instance)
         new_instance.save()
         print(new_instance.id)
