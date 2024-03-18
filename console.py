@@ -117,17 +117,19 @@ class HBNBCommand(cmd.Cmd):
     def do_create(self, args):
         """ Create an object of any class"""
         try:
-            class_name = shlex.split(args)[0]
-        except IndexError:
-            pass
-
+            if not args:
+                raise SyntaxError
+        except SyntaxError:
+            print("** class name missing **")
+            return
+        class_name = shlex.split(args)[0]
         if not class_name:
             print("** class name missing **")
             return
         elif class_name not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = eval(class_name)()
+        # new_instance = eval(class_name)()
         param_list = args.split(" ")
         kwargs_dict ={}
         for i in range(1, len(param_list)):
@@ -138,23 +140,20 @@ class HBNBCommand(cmd.Cmd):
             elif '.' in value:
                 value = float(value)
             else:
-                value = int(value)
+                try:
+                    value = eval(value)
+                except (NameError, SyntaxError):
+                    continue
+            
             kwargs_dict[key] = value
-        
-        for attrName, attrValue in kwargs_dict.items():
-            setattr(new_instance, attrName, attrValue)
-        #storage.new(new_instance)
-        new_instance.save()
-        print(new_instance.id)
-        #storage.save()
-        """
+
         if kwargs_dict == {}:
             obj = eval(param_list[0])()
         else:
             obj = eval(param_list[0])(**kwargs_dict)
             storage.new(obj)
         print(obj.id)
-        obj.save()"""
+        obj.save()
 
     def help_create(self):
         """ Help information for the create method """
