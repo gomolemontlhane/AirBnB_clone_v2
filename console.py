@@ -140,13 +140,21 @@ class HBNBCommand(cmd.Cmd):
                     value = eval(value)
                 except Exception:
                     continue
-            if hasattr(new_instance, key):
+            kwargs_dict[key] = value
+            """if hasattr(new_instance, key):
                 setattr(new_instance, key, value)
             else:
                 continue
         storage.new(new_instance)
         print(new_instance.id)
-        storage.save()
+        storage.save()"""
+        if kwargs_dict == {}:
+            obj = eval(param_list[0])()
+        else:
+            obj = eval(param_list[0])(**kwargs_dict)
+            storage.new(obj)
+        print(obj.id)
+        obj.save()
 
     def help_create(self):
         """ Help information for the create method """
