@@ -23,9 +23,7 @@ class City(BaseModel, Base):
                 cascade='all, delete, delete-orphan',
                 backref='cities'
                 )
-    if getenv('HBNB_TYPE_STORAGE') != "db":
-        name = ''
-        state_id = ''
+
 
 
 
