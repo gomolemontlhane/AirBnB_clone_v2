@@ -60,13 +60,13 @@ class FileStorage:
 
     def delete(self, obj=None):
         """Deletes obj from __objects if it's inside"""
-        if obj != None:
-            key_to_delete = None
-            for key, value in self.all().items():
-                if value == obj:
-                    key_to_delete = key
-                    break
-            if key_to_delete:
-                del self.all()[key_to_delete]
-        else:
+        if obj is None:
             return
+
+        keys_to_delete = [key for key, value in self.__objects.items() if value is obj]
+        for key in keys_to_delete:
+            try:
+                del self.__objects[key]
+            except KeyError:
+                # Handle the case where the key might not exist
+                pass
