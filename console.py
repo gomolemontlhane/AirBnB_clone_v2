@@ -120,27 +120,46 @@ class HBNBCommand(cmd.Cmd):
         try:
             class_name = args.split(" ")[0]
         except IndexError:
-            pass
-
-        if not class_name:
             print("** class name missing **")
             return
-        elif class_name not in HBNBCommand.classes:
+
+        if class_name not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
+
         param_list = args.split(" ")
         obj = eval(class_name)()
+
         for i in range(1, len(param_list)):
-            key, value = tuple(param_list[i].split('='))
-            if value[0] == '"':
-                value = value.strip('"').replace('_', ' ').replace('\\', '"')
-            else:
+            try:
+                key, value = param_list[i].split('=')
+            except ValueError:
+                # Skip parameters that can't be split into key=value
+                continue
+
+            # Handling value syntaxes
+            if value.startswith('"') and value.endswith('"'):
+                # String value
+                value = value.strip('"').replace('_', ' ').replace('\\"', '"')
+            elif '.' in value:
+                # Float value
                 try:
-                    value = eval(value)
-                except Exception:
-                    pass
+                    value = float(value)
+                except ValueError:
+                    # Skip if not a valid float
+                    continue
+            else:
+                # Integer value
+                try:
+                    value = int(value)
+                except ValueError:
+                    # Skip if not a valid integer
+                    continue
+
+            # Set attribute if it exists
             if hasattr(obj, key):
                 setattr(obj, key, value)
+
         storage.new(obj)
         print(obj.id)
         obj.save()
