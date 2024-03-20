@@ -7,6 +7,7 @@ from sqlalchemy.orm import relationship
 from os import getenv
 import models
 import shlex
+from models.amenity import Amenity
 
 
 place_amenity = Table("place_amenity", Base.metadata,
@@ -60,17 +61,17 @@ class Place(BaseModel, Base):
         def reviews(self):
             """ Returns list of reviews.id """
             var = models.storage.all()
-            lista = []
-            result = []
+            list_var = []
+            list_id = []
             for key in var:
                 review = key.replace('.', ' ')
                 review = shlex.split(review)
                 if (review[0] == 'Review'):
-                    lista.append(var[key])
-            for elem in lista:
+                    list_var.append(var[key])
+            for elem in list_var:
                 if (elem.place_id == self.id):
-                    result.append(elem)
-            return (result)
+                    list_id.append(elem)
+            return (list_id)
 
         @property
         def amenities(self):
