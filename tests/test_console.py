@@ -126,22 +126,21 @@ class TestHBNBCommand(unittest.TestCase):
 
     def test_create_command_with_kwargs(self):
         """Test create command with kwargs."""
-        # Test create command with additional key-value pairs
+        command = 'create Place city_id="0001" name="My_house" number_rooms=4 latitude=37.77 longitude=43.434'
+        expected = [
+            "'city_id': '0001'",
+            "'name': 'My_house'",
+            "'number_rooms': 4",
+            "'latitude': 37.77",
+            "'longitude': 43.434"
+        ]
         with patch("sys.stdout", new=StringIO()) as f:
-            call = (f'create Place city_id="0001" name="My_house" number_rooms=4 latitude=37.77 longitude=43.434')  # noqa
-            self.HBNB.onecmd(call)
+            self.HBNB.onecmd(command)
             pl = f.getvalue().strip()
-         # Test if the created instance and kwargs are in the
-         #    output of "all" command
-        with patch("sys.stdout", new=StringIO()) as f:
-            self.HBNB.onecmd("all Place")
-            output = f.getvalue()
-            self.assertIn(pl, output)
-            self.assertIn("'city_id': '0001'", output)
-            self.assertIn("'name': 'My house'", output)
-            self.assertIn("'number_rooms': 4", output)
-            self.assertIn("'latitude': 37.77", output)
-            self.assertIn("'longitude': 43.434", output)
+
+        self.assert_output_contains("all Place", pl)
+        for item in expected:
+            self.assert_output_contains("all Place", item)
 
 
 if __name__ == "__main__":

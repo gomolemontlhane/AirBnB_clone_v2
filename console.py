@@ -116,17 +116,14 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-
-        try:
-            class_name = args.split(" ")[0]
-        except IndexError:
+        if not args:
             print("** class name missing **")
             return
 
-        if class_name not in HBNBCommand.classes:
+        if args not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-
+        class_name = args.split(" ")[0]
         param_list = args.split(" ")
         obj = eval(class_name)()
 
