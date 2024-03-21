@@ -142,6 +142,13 @@ class TestHBNBCommand(unittest.TestCase):
         for item in expected:
             self.assert_output_contains("all Place", item)
 
+    def assert_output_contains(self, command, output):
+        """Assert that the output of the command contains the given string."""
+        with patch("sys.stdout", new=StringIO()) as f:
+            self.HBNB.onecmd(command)
+            self.assertIn(output, f.getvalue())
+
 
 if __name__ == "__main__":
     unittest.main()
+
